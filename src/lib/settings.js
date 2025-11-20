@@ -1,3 +1,4 @@
 export default {
-    URL: "https://api-pokequeue-dev.azurewebsites.net",
+  //URL: "https://api-pokequeueproject-dev.azurewebsites.net",
+  URL: "http://127.0.0.1:8000",
 };
