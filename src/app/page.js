@@ -25,6 +25,7 @@ export default function PokemonReportsPage() {
   const [creatingReport, setCreatingReport] = useState(false);
   const [error, setError] = useState(null);
   const [selectedType, setSelectedType] = useState("");
+  const [limit, setLimit] = useState(0);
 
   // Cargar los tipos de Pokémon
   useEffect(() => {
@@ -89,8 +90,7 @@ export default function PokemonReportsPage() {
       setCreatingReport(true);
 
       // Crear un nuevo reporte usando la API
-      await createReport(selectedType);
-
+      await createReport(selectedType, limit);
       // Mostrar notificación de éxito
       toast.success(
         `Se ha generado un nuevo reporte para el tipo ${selectedType}.`
@@ -158,8 +158,8 @@ export default function PokemonReportsPage() {
             </Alert>
           )}
 
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="w-full md:w-2/3">
+          <div className="flex md:flex-row gap-4 mb-6">
+            <div className="w-full md:w-1/3">
               <PokemonTypeSelector
                 pokemonTypes={pokemonTypes}
                 selectedType={selectedType}
@@ -167,18 +167,44 @@ export default function PokemonReportsPage() {
                 loading={loadingTypes}
               />
             </div>
-            <div className="w-full md:w-1/3">
-              <Button
-                onClick={catchThemAll}
-                disabled={!selectedType || isLoading || creatingReport}
-                className="w-full font-bold"
-              >
-                {creatingReport
-                  ? "Creating..."
-                  : isLoading
-                  ? "Loading..."
-                  : "Catch them all!"}
-              </Button>
+            <div className="flex items-center justify-center w-full md:w-2/3">
+              <div className="flex items-center justify-center w-full mr-8">
+                <label
+                  htmlFor="limit"
+                  className="block text-sm font-medium text-gray-700 mr-2"
+                >
+                  Cantidad de Pokemons(opcional):
+                </label>
+                <div className="relative flex flex-col">
+                  <input
+                    id="limit"
+                    name="limit"
+                    type="number"
+                    min="1"
+                    max="1000"
+                    defaultValue={0}
+                    onChange={(e) => setLimit(Number(e.target.value))}
+                    className="w-full bg-white border border-gray-200 rounded-md py-2 px-3 text-sm text-gray-700 placeholder-gray-400 shadow-sm
+                             focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                  />
+                  <p className="text-xs">
+                    Deja en 0 para traer todos los pokemon
+                  </p>
+                </div>
+              </div>
+              <div className="w-full ">
+                <Button
+                  onClick={() => catchThemAll()}
+                  disabled={!selectedType || isLoading || creatingReport}
+                  className="w-full font-bold"
+                >
+                  {creatingReport
+                    ? "Creating..."
+                    : isLoading
+                    ? "Loading..."
+                    : "Catch them all!"}
+                </Button>
+              </div>
             </div>
           </div>
 

@@ -42,8 +42,10 @@ export async function deleteReport(id) {
   }
 }
 
-export async function createReport(pokemonType) {
+export async function createReport(pokemonType, limit) {
   try {
+    console.log("THE LIMIT IS", limit);
+
     const response = await fetch(`${settings.URL}/api/request`, {
       method: "POST",
       headers: {
@@ -51,6 +53,7 @@ export async function createReport(pokemonType) {
       },
       body: JSON.stringify({
         pokemon_type: pokemonType,
+        sample_size: limit > 0 ? limit : null,
       }),
     });
 
